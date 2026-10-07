@@ -1,7 +1,7 @@
 # FlyRank CRUD API
 
 A simple CRUD API built with Node.js and Express for managing tasks.
-This project was developed as part of the FlyRank Backend AI Engineering internship.
+This project was developed as part of the FlyRank Backend AI Engineering internship.git add README.md
 ## Features
 
 - Create tasks
@@ -36,6 +36,7 @@ npm install
 | DELETE | `/tasks/:id` | Delete a task               |
 
 Swagger Documentation
+The Swagger UI provides an interactive interface to explore and test all available API endpoints.
 Swagger UI is available at:
 http://localhost:3000/api-docs/
 .It provides an interactive interface for viewing and testing all API endpoints.
