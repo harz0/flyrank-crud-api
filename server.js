@@ -53,9 +53,7 @@ app.get("/", (req, res) => {
  *         description: API is healthy
  */
 app.get("/health", (req, res) => {
-    res.json({
-        status: "ok"
-    });
+  res.status(200).json({ status: "ok" });
 });
 /**
  * @swagger
