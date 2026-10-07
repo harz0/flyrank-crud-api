@@ -1,7 +1,7 @@
 # FlyRank CRUD API
 
 A simple CRUD API built with Node.js and Express for managing tasks.
-
+This project was developed as part of the FlyRank Backend AI Engineering internship.
 ## Features
 
 - Create tasks
