@@ -204,31 +204,43 @@ app.post("/tasks", (req, res) => {
  */
 app.put("/tasks/:id", (req, res) => {
     const id = Number(req.params.id);
-    const task = tasks.find(task => task.id === id);
+    const { title, done } = req.body;
 
-    if (!task) {
+    if (typeof title !== "string" || title.trim() === "") {
+        return res.status(400).json({
+            error: "Title is required"
+        });
+    }
+
+    if (typeof done !== "boolean") {
+        return res.status(400).json({
+            error: "Done must be a boolean"
+        });
+    }
+
+    const existingTask = db.prepare(
+        "SELECT * FROM tasks WHERE id = ?"
+    ).get(id);
+
+    if (!existingTask) {
         return res.status(404).json({
             error: "Task not found"
         });
     }
 
-    const { title, done } = req.body;
+    db.prepare(
+        "UPDATE tasks SET title = ?, done = ? WHERE id = ?"
+    ).run(title.trim(), done ? 1 : 0, id);
 
-    if (title !== undefined) {
-        if (typeof title !== "string" || title.trim() === "") {
-            return res.status(400).json({
-                error: "Title must not be empty"
-            });
-        }
+    const updatedTask = db.prepare(
+        "SELECT * FROM tasks WHERE id = ?"
+    ).get(id);
 
-        task.title = title;
-    }
-
-    if (done !== undefined) {
-        task.done = done;
-    }
-
-    res.json(task);
+    res.status(200).json({
+        id: updatedTask.id,
+        title: updatedTask.title,
+        done: Boolean(updatedTask.done)
+    });
 });
 /**
  * @swagger
@@ -249,15 +261,20 @@ app.put("/tasks/:id", (req, res) => {
  */
 app.delete("/tasks/:id", (req, res) => {
     const id = Number(req.params.id);
-    const taskIndex = tasks.findIndex(task => task.id === id);
 
-    if (taskIndex === -1) {
+    const existingTask = db.prepare(
+        "SELECT * FROM tasks WHERE id = ?"
+    ).get(id);
+
+    if (!existingTask) {
         return res.status(404).json({
             error: "Task not found"
         });
     }
 
-    tasks.splice(taskIndex, 1);
+    db.prepare(
+        "DELETE FROM tasks WHERE id = ?"
+    ).run(id);
 
     res.status(204).send();
 });
