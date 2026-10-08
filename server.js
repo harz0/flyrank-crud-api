@@ -84,7 +84,15 @@ app.get("/health", (req, res) => {
  *         description: List of all tasks
  */
 app.get("/tasks", (req, res) => {
-    res.status(200).json(tasks);
+    const tasks = db.prepare("SELECT * FROM tasks").all();
+
+    res.status(200).json(
+        tasks.map(task => ({
+            id: task.id,
+            title: task.title,
+            done: Boolean(task.done)
+        }))
+    );
 });
 /**
  * @swagger
@@ -105,7 +113,7 @@ app.get("/tasks", (req, res) => {
  */
 app.get("/tasks/:id", (req, res) => {
     const id = Number(req.params.id);
-    const task = tasks.find(task => task.id === id);
+    const task = db.prepare("SELECT * FROM tasks WHERE id = ?").get(id);
 
     if (!task) {
         return res.status(404).json({
@@ -113,7 +121,11 @@ app.get("/tasks/:id", (req, res) => {
         });
     }
 
-    res.json(task);
+    res.status(200).json({
+        id: task.id,
+        title: task.title,
+        done: Boolean(task.done)
+    });
 });
 /**
  * @swagger
