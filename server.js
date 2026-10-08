@@ -65,7 +65,7 @@ app.get("/health", (req, res) => {
  *         description: List of all tasks
  */
 app.get("/tasks", (req, res) => {
-    res.json(tasks);
+    res.status(200).json(tasks);
 });
 /**
  * @swagger
