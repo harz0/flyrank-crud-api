@@ -1,7 +1,7 @@
 # FlyRank CRUD API
 
-A simple CRUD API built with Node.js and Express for managing tasks.
-This project was developed as part of the FlyRank Backend AI Engineering internship.git add README.md
+A simple CRUD API built with Node.js and Express for managing tasks. This project was developed as part of the FlyRank Backend AI Engineering internship.
+
 ## Features
 
 - Create tasks
@@ -18,36 +18,46 @@ This project was developed as part of the FlyRank Backend AI Engineering interns
 2. Open the project folder in a terminal.
 3. Install the dependencies:
 
-```bash
-npm install
+    npm install
 
-.The API will run at:
- http://localhost:3000/
+4. Start the server:
 
- ## API Endpoints
-| Method | Endpoint     | Description                 |
-|--------|--------------|-----------------------------|
-| GET    | `/`          | Check if the API is running |
-| GET    | `/health`    | Check API health            |
-| GET    | `/tasks`     | Get all tasks               |
-| GET    | `/tasks/:id` | Get a task by ID            |
-| POST   | `/tasks`     | Create a new task           |
-| PUT    | `/tasks/:id` | Update a task               |
-| DELETE | `/tasks/:id` | Delete a task               |
+    node server.js
 
-Swagger Documentation
+The API will run at:
+
+http://localhost:3000/
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | / | Check if the API is running |
+| GET | /health | Check API health |
+| GET | /tasks | Get all tasks |
+| GET | /tasks/:id | Get a task by ID |
+| POST | /tasks | Create a new task |
+| PUT | /tasks/:id | Update a task |
+| DELETE | /tasks/:id | Delete a task |
+
+## Swagger Documentation
+
 The Swagger UI provides an interactive interface to explore and test all available API endpoints.
+
 Swagger UI is available at:
+
 http://localhost:3000/api-docs/
-.It provides an interactive interface for viewing and testing all API endpoints.
+
 ## Example Request
+
 Check the API health using curl:
 
-```bash
-curl -i http://localhost:3000/health
+    curl -i http://localhost:3000/health
 
-Expected Output : 
-HTTP/1.1 200 OK
+Expected output:
+
+    HTTP/1.1 200 OK
 
 ## Swagger UI
+
 ![Swagger UI](CRUD%20API.png)
