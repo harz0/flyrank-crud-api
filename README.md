@@ -159,3 +159,10 @@ docker compose down
 ```
 
 The named database volume is retained unless explicitly removed.
+## Docker Desktop Screenshot
+
+![Docker Desktop Containers](DOCKER.png)
+
+## PostgreSQL API Response
+
+![PostgreSQL API Response](POSTGRESQL.png)
