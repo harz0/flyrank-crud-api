@@ -1,3 +1,4 @@
 node_modules/
 .env
 tasks.db
+server-sqlite-backup.js

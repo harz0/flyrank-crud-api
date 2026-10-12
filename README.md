@@ -1,49 +1,69 @@
 # FlyRank CRUD API
 
-A simple CRUD API built with Node.js, Express, and SQLite for managing tasks. This project was developed as part of the FlyRank Backend AI Engineering internship.
+A RESTful CRUD API built with Node.js, Express, and PostgreSQL, containerized using Docker and Docker Compose. Developed as part of the FlyRank Backend AI Engineering internship.
 
 ## Features
 
-- Create tasks
-- View all tasks
-- View a task by ID
-- Update tasks
-- Delete tasks
-- Input validation
-- SQLite database persistence
-- Automatic database and table creation
-- Initial seed data when the database is empty
+- Create, view, update, and delete tasks
+- Input validation and appropriate HTTP status codes
+- PostgreSQL database integration
+- Automatic database table initialization
+- Persistent database storage using Docker volumes
+- Environment-based configuration
+- Dockerized Node.js application
+- Docker Compose orchestration
 - Swagger API documentation
 
 ## Technologies Used
 
 - Node.js
 - Express.js
-- SQLite
-- better-sqlite3
+- PostgreSQL
+- `pg` (node-postgres)
+- Docker
+- Docker Compose
 - Swagger UI
 
-## Installation
+## Prerequisites
 
-1. Clone the repository.
-2. Open the project folder in a terminal.
-3. Install the dependencies:
+- Docker Desktop with Docker Compose
+- Git
+
+## Installation and Setup
+
+1. Clone the repository:
 
    ```bash
-   npm install
+   git clone https://github.com/harz0/flyrank-crud-api.git
    ```
 
-4. Start the server:
+2. Navigate to the project directory:
 
    ```bash
-   node server.js
+   cd flyrank-crud-api
+   ```
+
+3. Create your environment file by copying the example:
+
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+
+4. Build and start the application and PostgreSQL database:
+
+   ```bash
+   docker compose up --build -d
+   ```
+
+5. Check the container status:
+
+   ```bash
+   docker compose ps
    ```
 
 The API runs at:
 
 http://localhost:3000/
-
-The SQLite database file (`tasks.db`) is created automatically when the server starts. The database and `tasks` table are initialized if they do not exist. Three example tasks are inserted only when the table is empty.
 
 ## API Endpoints
 
@@ -59,62 +79,83 @@ The SQLite database file (`tasks.db`) is created automatically when the server s
 
 ## Database
 
-SQLite is used to persist tasks across server restarts without requiring a separate database server.
+PostgreSQL is used to store tasks.
 
-- **Database:** SQLite
-- **Library:** better-sqlite3
-- **Database file:** `tasks.db` in the project root
+- **Database:** `tasks`
 - **Table:** `tasks`
 - **Columns:** `id`, `title`, `done`
+- **Initialization script:** `db/init.sql`
+- **Persistent volume:** `taskdata`
 
-The database file is excluded from Git using `.gitignore`. It is generated locally when the application starts.
+The database table is initialized automatically when the application starts. Docker Compose uses a named volume to preserve database data when containers are recreated.
 
-### Example SQL Query
+## Environment Configuration
 
-Retrieve all tasks from the database:
+Create a local `.env` file using `.env.example`.
 
-```sql
-SELECT * FROM tasks;
-```
+- `POSTGRES_PASSWORD`: PostgreSQL password used by Docker Compose.
+- `DATABASE_URL`: PostgreSQL connection string for local execution.
+- `PORT`: API server port.
 
-Find completed tasks:
+The `.env` file is excluded from Git. Do not commit real credentials.
 
-```sql
-SELECT * FROM tasks WHERE done = 1;
-```
+## Verify Data Persistence
 
-Count all tasks:
+1. Create a task using the API.
+2. Stop and remove the containers:
 
-```sql
-SELECT COUNT(*) AS total_tasks FROM tasks;
-```
+   ```bash
+   docker compose down
+   ```
+
+3. Start the containers again:
+
+   ```bash
+   docker compose up -d
+   ```
+
+4. Retrieve the tasks:
+
+   ```powershell
+   Invoke-RestMethod -Uri "http://localhost:3000/tasks" -Method Get
+   ```
+
+Previously stored tasks should still be present because the named PostgreSQL volume persists independently of the containers.
+
+**Important:** Do not use `docker compose down -v` when testing persistence, because that command removes the Compose-managed volume.
 
 ## Swagger Documentation
 
-Swagger UI provides an interactive interface to explore and test the API endpoints.
-
-Open:
+Explore and test the API interactively at:
 
 http://localhost:3000/api-docs/
 
 ## Example Request
 
-Check the API health using curl:
+Retrieve all tasks:
 
 ```bash
-curl -i http://localhost:3000/health
+curl http://localhost:3000/tasks
 ```
 
-Expected response status:
+Create a task using PowerShell:
 
-```text
-HTTP/1.1 200 OK
+```powershell
+Invoke-RestMethod -Uri "http://localhost:3000/tasks" -Method Post -ContentType "application/json" -Body '{"title":"Sample Task","done":false}'
 ```
 
 ## Swagger UI Screenshot
 
 ![Swagger UI](CRUD%20API.png)
 
-## SQLite Database Screenshot
+## Database Screenshot
 
-![SQLite Database](DATABASE.png)
+![Database](DATABASE.png)
+
+## Stopping the Application
+
+```bash
+docker compose down
+```
+
+The named database volume is retained unless explicitly removed.
