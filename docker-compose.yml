@@ -23,6 +23,8 @@ services:
     environment:
       PORT: 3000
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@db:5432/tasks
+      SUPABASE_URL: https://tubdmajfvzixrkckgife.supabase.co
+      SUPABASE_KEY: sb_publishable_GKy86rqJmr1MOvDMvtwT0w_O3IDXI3F
     depends_on:
       db:
         condition: service_healthy
